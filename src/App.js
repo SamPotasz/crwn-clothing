@@ -34,7 +34,7 @@ class App extends React.Component {
               id: snapshot.id,
               ...snapshot.data()
             }
-          }, () => console.log(this.state))
+          })
         });
       }
       else  //yihua doesn't have this else :-/ i guess it's a little redundant
