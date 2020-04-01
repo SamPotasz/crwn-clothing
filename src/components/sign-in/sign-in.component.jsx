@@ -12,8 +12,8 @@ class SignIn extends React.Component {
         super(props);
 
         this.state = {
-            email: 'sam@sam.com',
-            password: 'bananas',
+            email: '',
+            password: '',
         }
     }
 
@@ -56,7 +56,7 @@ class SignIn extends React.Component {
                     <div className="buttons">
                         <CustomButton type="submit" value='Submit Form'>Sign In</CustomButton>
                         <CustomButton onClick={signInWithGoogle} isGoogleSignIn>
-                            Sign In With Google</CustomButton>
+                            {' '}Sign In With Google{' '}</CustomButton>
                     </div>
                     
                 </form>

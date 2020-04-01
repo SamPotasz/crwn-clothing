@@ -7,7 +7,7 @@ import Header from './components/header/header.component';
 import HomePage from './pages/hompepage/hompage.component';
 import ShopPage from './pages/shop/shop.component';
 import SignInAndSignUp from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
-import { auth } from './firebase/firebase.utils';
+import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 
 class App extends React.Component {
   constructor(){
@@ -22,10 +22,8 @@ class App extends React.Component {
 
   componentDidMount() {
     //when onAuthStateChanged is called, it returns its closing method. save that, call on unMount
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(user => {
-      this.setState({currentUser: user });
-
-      console.log(this.state.currentUser);
+    this.unsubscribeFromAuth = auth.onAuthStateChanged( async user => {
+      createUserProfileDocument(user);
     })
   }
 
