@@ -22,8 +22,25 @@ class App extends React.Component {
 
   componentDidMount() {
     //when onAuthStateChanged is called, it returns its closing method. save that, call on unMount
-    this.unsubscribeFromAuth = auth.onAuthStateChanged( async user => {
-      createUserProfileDocument(user);
+    this.unsubscribeFromAuth = auth.onAuthStateChanged( async userAuth => {
+      if(userAuth) {
+        //save to firebase
+        const userRef = await createUserProfileDocument(userAuth);
+
+        //check if data changed
+        userRef.onSnapshot(snapshot => {
+          this.setState({
+            currentUser: {
+              id: snapshot.id,
+              ...snapshot.data()
+            }
+          }, () => console.log(this.state))
+        });
+      }
+      else  //yihua doesn't have this else :-/ i guess it's a little redundant
+      {
+        this.setState({currentUser: userAuth});
+      }
     })
   }
 
