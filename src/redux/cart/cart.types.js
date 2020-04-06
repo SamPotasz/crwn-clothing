@@ -1,4 +1,6 @@
 export const CART_ACTION_TYPES = Object.freeze({
     TOGGLE_CART_HIDDEN: "toggle cart hidden",
-    ADD_ITEM: 'adding item to cart',
+    ADD_ITEM: 'increase quantity by one',
+    REMOVE_ITEM: 'remove one of this item from cart',
+    CLEAR_ITEM: 'clear all of this item from the cart',
 })
