@@ -10,6 +10,8 @@ import CartItem from '../cart-item/cart-item.component';
 import { toggleCartHidden } from '../../redux/cart/cart.actions';
 import { selectCartItems } from '../../redux/cart/cart.selectors';
 
+//connect gives access to dispatch property. 
+// can use it for 1-off dispatches w/out writing mapDispatchToProps
 const CartDropdown = ({cartItems, history, dispatch}) => (
     <div className='cart-dropdown'>
         <div className='cart-items' >
