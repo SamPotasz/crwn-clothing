@@ -6,7 +6,6 @@ import CollectionItem from '../../components/collection-item/collection-item.com
 
 import './collection.styles.scss';
 
-//can access url params from match.params
 const CollectionPage = ({ collection }) => {
     const {title, items} = collection;
     return (<div className='collection-page'>
@@ -21,7 +20,7 @@ const CollectionPage = ({ collection }) => {
     </div>)
 }
 
-
+//can access url params from match.params
 const mapStateToProps = (state, ownProps) => ({
     collection: selectCollection(ownProps.match.params.collectionId)(state)
 })

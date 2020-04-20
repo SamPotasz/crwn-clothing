@@ -10,11 +10,12 @@ export const selectCollections = createSelector(
 export const selectCollectionsForPreview = createSelector(
     [selectCollections],
     collections => 
-        Object.keys(collections).map(key => collections[key])
+        collections ? Object.keys(collections).map(key => collections[key]) : []
 )
 
 //TODO: move away from collections.find with normalization
 export const selectCollection = collectionUrlParam =>
     createSelector(
         [selectCollections],
-        collections => collections[collectionUrlParam])
+        collections => collections ? collections[collectionUrlParam] : null
+    );
