@@ -38,6 +38,47 @@ export const createUserProfileDocument = async (userAuth, addlData) => {
     return userRef;
 }
 
+/**
+ * takes and array of objects and stores them on firebase with the given key
+ * @param {string} collectionKey: name of collection to store on firebase
+ * @param {array} objectsToAdd: array of objects to add to firebase
+ */
+export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
+    const collectionRef = firestore.collection(collectionKey);
+    // console.log(collectionRef);
+
+    //need to do a batch-write to make sure all the objects get added even if internet fails
+    const batch = firestore.batch();
+    objectsToAdd.forEach(obj => {
+        const newDocRef = collectionRef.doc();  //get a blank document in this collection
+        batch.set(newDocRef, obj);
+    })
+
+    return await batch.commit();
+}
+
+/**
+ * 
+ * @param {array} collections 
+ */
+export const convertCollectionsSnapshotToMap = (collections) => {
+    const transformedCollection = collections.docs.map( doc => {
+        const { title, items } = doc.data();
+        return {
+            routeName: encodeURI(title.toLowerCase()),
+            id: doc.id,
+            title, 
+            items
+        }
+    });
+    
+    //create an object keyed by title
+    return transformedCollection.reduce((accumulator, collection) => {
+        accumulator[collection.title.toLowerCase()] = collection;
+        return accumulator;
+    },  {});
+}
+
 firebase.initializeApp(config);
 
 export const auth = firebase.auth();

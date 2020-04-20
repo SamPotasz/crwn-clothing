@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 import './App.css';
-// import '../src/assets';
 
 import Header from './components/header/header.component';
 import HomePage from './pages/hompepage/hompage.component';
@@ -22,7 +21,7 @@ class App extends React.Component {
 
   componentDidMount() {
 
-    const {setCurrentUser} = this.props;
+    const {setCurrentUser } = this.props;
 
     //when onAuthStateChanged is called, it returns its closing method. save that, call on unMount
     this.unsubscribeFromAuth = auth.onAuthStateChanged( async userAuth => {
@@ -30,7 +29,7 @@ class App extends React.Component {
         //save to firebase
         const userRef = await createUserProfileDocument(userAuth);
 
-        //check if data changed
+        //add listener for data changes
         userRef.onSnapshot(snapshot => {
           setCurrentUser({
             id: snapshot.id,
@@ -40,6 +39,8 @@ class App extends React.Component {
       }
 
       setCurrentUser(userAuth);
+      // addCollectionAndDocuments('collections', 
+      //   collectionsArray.map(({title, items}) => ({title, items})))
     })
   }
 
@@ -69,7 +70,7 @@ const mapStateToProps = createStructuredSelector({
 
 //dispatch is an action object. so 
 const mapDispatchToProps = (dispatch) => ({
-  setCurrentUser: user => dispatch(setCurrentUser(user))
+  setCurrentUser: user => dispatch(setCurrentUser(user)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
