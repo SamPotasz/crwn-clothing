@@ -3,10 +3,12 @@ import React from 'react';
 import './homepage.styles.scss';
 import DirectoryMenu from '../../components/directory-menu/directory-menu.component';
 
+import { HomePageContainer } from './homepage.styles.jsx';
+
 const HomePage = () => (
-    <div className='homepage'>
+    <HomePageContainer>
         <DirectoryMenu />
-    </div>
+    </HomePageContainer>    
 )
 
 export default HomePage;
