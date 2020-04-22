@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {Route, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -15,13 +15,39 @@ import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 import { setCurrentUser } from './redux/user/user.actions';
 import { selectCurrentUser } from './redux/user/user.selectors'
 
-class App extends React.Component {
+const App = ({ setCurrentUser, currentUser }) => {
     
-  unsubscribeFromAuth = null;
+  // let unsubscribeFromAuth = null;
 
+  useEffect(() => {
+    //when onAuthStateChanged is called, it returns its closing method. save that, call on unMount
+    const unsubscribe = auth.onAuthStateChanged( async userAuth => {
+      if(userAuth) {
+        //save to firebase
+        const userRef = await createUserProfileDocument(userAuth);
+
+        //add listener for data changes
+        userRef.onSnapshot(snapshot => {
+          setCurrentUser({
+            id: snapshot.id,
+            ...snapshot.data()
+          })
+        });
+      }
+
+      setCurrentUser(userAuth);
+      
+      // addCollectionAndDocuments('collections', 
+      //   collectionsArray.map(({title, items}) => ({title, items})))
+    
+      return () => {
+        unsubscribe();
+      }
+      })
+  }, [])
+
+  /*
   componentDidMount() {
-
-    const {setCurrentUser } = this.props;
 
     //when onAuthStateChanged is called, it returns its closing method. save that, call on unMount
     this.unsubscribeFromAuth = auth.onAuthStateChanged( async userAuth => {
@@ -47,8 +73,8 @@ class App extends React.Component {
   componentWillUnmount() {
     this.unsubscribeFromAuth();
   }
+  */
 
-  render() {
     return (
       <div>
         <Header />
@@ -57,11 +83,11 @@ class App extends React.Component {
           <Route path='/shop' component={ShopPage}/>
           <Route exact path='/checkout' component={CheckoutPage}/>
           <Route exact path='/signin' render={() => 
-            this.props.currentUser ? (<Redirect to='/' />) : (<SignInAndSignUp />)} />
+            currentUser ? (<Redirect to='/' />) : (<SignInAndSignUp />)} />
         </Switch>
       </div>
     );
-  }
+    
 }
 
 const mapStateToProps = createStructuredSelector({
