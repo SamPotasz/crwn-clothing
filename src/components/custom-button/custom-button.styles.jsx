@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
 
+//css for a regular old button with a filled bg
 const buttonStyles = css`
   background-color: black;
   color: white;
@@ -12,6 +13,7 @@ const buttonStyles = css`
   }
 `;
 
+//css for a button with an empty background
 const invertedButtonStyles = css`
   background-color: white;
   color: black;
@@ -24,6 +26,7 @@ const invertedButtonStyles = css`
   }
 `;
 
+//css for a google button with a blue background
 const googleSignInStyles = css`
   background-color: #4285f4;
   color: white;
@@ -34,6 +37,12 @@ const googleSignInStyles = css`
   }
 `;
 
+/**
+ * function to return proper css based on button props
+ * if isGoogleSignin, return google css
+ * if isInverted, return inverted css
+ * else, return regular css
+ */
 const getButtonStyles = props => {
   if (props.isGoogleSignIn) {
     return googleSignInStyles;
@@ -41,6 +50,7 @@ const getButtonStyles = props => {
 
   return props.isInverted ? invertedButtonStyles : buttonStyles;
 };
+
 
 export const CustomButtonContainer = styled.button`
   min-width: 165px;

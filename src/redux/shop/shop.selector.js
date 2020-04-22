@@ -6,6 +6,10 @@ export const selectCollections = createSelector(
     [selectShop],
     (shop => shop.collections)
 )
+export const selectIsCollectionFetching = createSelector(
+    [selectShop],
+    (shop => shop.isFetching)
+)
 
 export const selectCollectionsForPreview = createSelector(
     [selectCollections],
@@ -14,8 +18,13 @@ export const selectCollectionsForPreview = createSelector(
 )
 
 //TODO: move away from collections.find with normalization
-export const selectCollection = collectionUrlParam =>
-    createSelector(
-        [selectCollections],
-        collections => collections ? collections[collectionUrlParam] : null
-    );
+export const selectCollection = collectionUrlParam => createSelector(
+    [selectCollections],
+    collections => collections ? collections[collectionUrlParam] : null
+);
+
+//boolean whether or not collections is null
+export const selectIsCollectionsLoaded = createSelector(
+    [selectShop],
+    shop => !!shop.collections
+)
