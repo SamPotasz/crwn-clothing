@@ -33,7 +33,6 @@ import { addItem, removeItem, clearItem } from '../../redux/cart/cart.actions';
     addItem: (item) => dispatch(addItem(item)),
     removeItem: (item) => dispatch(removeItem(item)),
     clearItem: (item) => dispatch(clearItem(item)),
-
  })
 
  export default connect(null, mapDispatchToProps)(CheckoutItem);

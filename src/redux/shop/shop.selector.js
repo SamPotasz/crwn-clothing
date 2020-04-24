@@ -17,7 +17,6 @@ export const selectCollectionsForPreview = createSelector(
         collections ? Object.keys(collections).map(key => collections[key]) : []
 )
 
-//TODO: move away from collections.find with normalization
 export const selectCollection = collectionUrlParam => createSelector(
     [selectCollections],
     collections => collections ? collections[collectionUrlParam] : null
