@@ -2,19 +2,20 @@ import React from 'react';
 import { connect } from 'react-redux';  //HOC that gives access to redux reducers/store
 import { createStructuredSelector } from 'reselect';
 
-import { auth } from '../../firebase/firebase.utils';
 import CartDropdown from '../cart-dropdown/cart-dropdown.component';
 import CartIcon from '../cart-icon/cart-icon.component';
 import { selectCartHidden } from '../../redux/cart/cart.selectors';
 import { selectCurrentUser } from '../../redux/user/user.selectors';
+import { SignOutStart } from '../../redux/user/user.actions';
 
 import { ReactComponent as Logo } from '../../assets/crown.svg';
 
 import { HeaderContainer, OptionLink, OptionsContainer, LogoContainer } from './header.styles.jsx';
 
-const Header = ({currentUser, hidden}) => (
-    
-    <HeaderContainer>
+const Header = (props) => {
+  const { currentUser, hidden, dispatchSignOutStart } = props;
+
+   return( <HeaderContainer>
         <LogoContainer to="/">
             <Logo className='logo'/>
         </LogoContainer>
@@ -28,7 +29,7 @@ const Header = ({currentUser, hidden}) => (
             </OptionLink> */}
             {
                 currentUser ? 
-                <OptionLink as='div' onClick={() => auth.signOut()}>SIGN OUT</OptionLink> 
+                <OptionLink as='div' onClick={dispatchSignOutStart}>SIGN OUT</OptionLink> 
                 : 
                 <OptionLink to='/signin'>SIGN IN</OptionLink>
             }
@@ -36,7 +37,8 @@ const Header = ({currentUser, hidden}) => (
         </OptionsContainer>
         { hidden ? null : <CartDropdown /> }
     </HeaderContainer>
-)
+   )
+}
 
 //createStructuredSelector will automatically pass state into the functions below
 const mapStateToProps = createStructuredSelector ({
@@ -44,4 +46,8 @@ const mapStateToProps = createStructuredSelector ({
     hidden: selectCartHidden,
 })
 
-export default connect(mapStateToProps)(Header);
+const mapDispatchToProps = dispatch => ({
+  dispatchSignOutStart: () => dispatch(SignOutStart())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

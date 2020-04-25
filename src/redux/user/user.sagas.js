@@ -3,7 +3,7 @@ import { takeLatest, put, all, call } from 'redux-saga/effects';
 import UserActionTypes from './user.types';
 
 import { auth, googleProvider, createUserProfileDocument, getCurrentUser } from '../../firebase/firebase.utils';
-import { SignInSuccess, SignInFailure } from './user.actions';
+import { SignInSuccess, SignInFailure, SignOutFailure, SignOutSuccess } from './user.actions';
 
 /**
  * 
@@ -57,6 +57,16 @@ function* isUserAuthenticated() {
   }
 }
 
+function* startSignOut() {
+  try {
+    yield auth.signOut();
+    yield put( SignOutSuccess() );
+  }
+  catch ( error ){
+    yield put( SignOutFailure( error ));
+  }
+}
+
 //listen for GOOGLE_SIGNIN_START and trigger actual action in reducer
 export function* onGoogleSignInStart() {
   yield takeLatest(UserActionTypes.GOOGLE_SIGNIN_START, signInWithGoogle)
@@ -66,10 +76,23 @@ export function* onEmailSignInStart() {
   yield takeLatest(UserActionTypes.EMAIL_SIGNIN_START, signInWithEmail );
 }
 
+/**
+ * Listener for checking if a user auth persists in a session.
+ * Triggered on app re-render.
+ */
 export function* onCheckUserSession() {
   yield takeLatest(
     UserActionTypes.CHECK_USER_SESSION, isUserAuthenticated
   )
+}
+
+/**
+ * Listener for user initiating sign-out process.
+ * Triggered by clicking sign out button
+ * Initiates API call
+ */
+export function* onSignOutStart() {
+  yield takeLatest( UserActionTypes.SIGN_OUT_START, startSignOut )
 }
 
 export function* userSagas() {
@@ -77,5 +100,6 @@ export function* userSagas() {
     call(onGoogleSignInStart),
     call(onEmailSignInStart),
     call(onCheckUserSession),
+    call(onSignOutStart),
   ])
 }
