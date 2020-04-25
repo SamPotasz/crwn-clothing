@@ -9,6 +9,7 @@ const INITIAL_STATE = {
 const shopReducer = (state = INITIAL_STATE, action) => {
     switch(action.type) {
         case SHOP_ACTION_TYPES.FETCH_COLLECTIONS_START:
+            console.log("started in reducer");
             return {
                 ...state,
                 isFetching: true,

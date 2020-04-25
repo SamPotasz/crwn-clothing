@@ -77,6 +77,16 @@ export const convertCollectionsSnapshotToMap = (collections) => {
         accumulator[collection.title.toLowerCase()] = collection;
         return accumulator;
     },  {});
+};
+
+//mimicking backend until we have one
+export const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = auth.onAuthStateChanged( userAuth => {
+      unsubscribe();
+      resolve( userAuth );  //if succeed, resolve to returned userAuth
+    }, reject ) //if fails, reject
+  })
 }
 
 firebase.initializeApp(config);
@@ -85,8 +95,8 @@ export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 
 //setup google auth
-const provider = new firebase.auth.GoogleAuthProvider();
-provider.setCustomParameters({ prompt: 'select_account' });
-export const signInWithGoogle = () => auth.signInWithPopup(provider);
+export const googleProvider = new firebase.auth.GoogleAuthProvider();
+googleProvider.setCustomParameters({ prompt: 'select_account' });
+export const signInWithGoogle = () => auth.signInWithPopup(googleProvider);
 
 export default firebase;
