@@ -4,12 +4,6 @@ import axios from 'axios';
 
 const publishableKey = 'pk_test_trpsYhm2w6757tR6jjTNka5A008z7UyMjA';
 
-/**
- * 
- * @param {*} token 
- */
-
-
 //https://github.com/azmenak/react-stripe-checkout
 const StripeButton = ({ usd }) => {
   const cents = usd * 100;  //stripe needs payment amount in cents
