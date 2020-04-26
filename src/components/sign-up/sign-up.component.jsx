@@ -1,45 +1,53 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 
 import FormInput from '../form-input/form-input.component';
 import CustomButton from '../custom-button/custom-button.component';
 
-import { auth, createUserProfileDocument } from '../../firebase/firebase.utils';
+// import { auth, createUserProfileDocument } from '../../firebase/firebase.utils';
+import { SignUpStart } from '../../redux/user/user.actions';
 
 import './sign-up.styles.scss';
 
-const SignUp = () => {
-    const [userCredentials, setUserCredentials] = useState({
-            displayName: '',
-            email: '',
-            password: '',
-            confirmPassword: '',
-        });
+const SignUp = props => {
+
+  const { dispatchStartSignup } = props;
+
+  const [userCredentials, setUserCredentials] = useState({
+    displayName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
     
-    const { displayName, email, password, confirmPassword } = userCredentials;
+  const { displayName, email, password, confirmPassword } = userCredentials;
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-        if(password !== confirmPassword) {
-            alert("Your passwords must match!");
-            return;
-        }
-
-        try {
-            const { user } = await auth.createUserWithEmailAndPassword(email, password);
-            await createUserProfileDocument(user, {displayName});
-
-            setUserCredentials({
-                displayName: '',
-                email: '',
-                password: '',
-                confirmPassword: ''
-            })
-
-        } catch(error) {
-            console.error(error);
-        }
+    if(password !== confirmPassword) {
+      alert("Your passwords must match!");
+      return;
     }
+
+    dispatchStartSignup( userCredentials );
+
+    // try {
+    //   const { user } = await auth.createUserWithEmailAndPassword(email, password);
+    //   await createUserProfileDocument(user, {displayName});
+
+    //   setUserCredentials({
+    //       displayName: '',
+    //       email: '',
+    //       password: '',
+    //       confirmPassword: ''
+    //   })
+
+    // } catch(error) {
+    //     console.error(error);
+    // }
+    
+  }
 
     const handleChange = (event) => {
         const { value, name } = event.target;
@@ -95,4 +103,8 @@ const SignUp = () => {
     )
 }
 
-export default SignUp;
+const mapDispatchToProps = dispatch => ({
+  dispatchStartSignup: (userCredentials) => dispatch(SignUpStart(userCredentials))
+})
+
+export default connect(null, mapDispatchToProps )(SignUp);

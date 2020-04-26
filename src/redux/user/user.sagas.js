@@ -3,7 +3,7 @@ import { takeLatest, put, all, call } from 'redux-saga/effects';
 import UserActionTypes from './user.types';
 
 import { auth, googleProvider, createUserProfileDocument, getCurrentUser } from '../../firebase/firebase.utils';
-import { SignInSuccess, SignInFailure, SignOutFailure, SignOutSuccess } from './user.actions';
+import { SignInSuccess, SignInFailure, SignOutFailure, SignOutSuccess, SignUpFailure, SignUpSuccess } from './user.actions';
 
 /**
  * 
@@ -57,6 +57,9 @@ function* isUserAuthenticated() {
   }
 }
 
+/**
+ * Generator for sign out start listener
+ */
 function* startSignOut() {
   try {
     yield auth.signOut();
@@ -64,6 +67,29 @@ function* startSignOut() {
   }
   catch ( error ){
     yield put( SignOutFailure( error ));
+  }
+}
+
+/**
+ * Generator for sign UP start listener
+ */
+function* startSignUp({ payload: {email, password, displayName}}) {
+  try {
+    const { user } = yield auth.createUserWithEmailAndPassword(email, password);
+    const userRef = yield call(createUserProfileDocument, user, displayName);
+    console.log(userRef);
+    const userSnapshot = yield userRef.get();
+    yield put( SignUpSuccess({ id: userSnapshot.id, ...userSnapshot.data() }) )
+
+    // setUserCredentials({
+    //     displayName: '',
+    //     email: '',
+    //     password: '',
+    //     confirmPassword: ''
+    // })
+
+  } catch ( error ) {
+      yield put( SignUpFailure( error ))
   }
 }
 
@@ -95,11 +121,19 @@ export function* onSignOutStart() {
   yield takeLatest( UserActionTypes.SIGN_OUT_START, startSignOut )
 }
 
+/**
+ * Listener for user submitting the signup form.
+ */
+export function* onSignUpStart() {
+  yield takeLatest( UserActionTypes.SIGN_UP_START, startSignUp )
+}
+
 export function* userSagas() {
   yield all([
     call(onGoogleSignInStart),
     call(onEmailSignInStart),
     call(onCheckUserSession),
     call(onSignOutStart),
+    call(onSignUpStart),
   ])
 }
