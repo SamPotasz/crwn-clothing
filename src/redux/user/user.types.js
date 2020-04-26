@@ -1,4 +1,3 @@
-//create an enum
 const UserActionTypes = Object.freeze({
   SET_CURR_USER: Symbol('setting current user'),
   CHECK_USER_SESSION: Symbol('checking user session'),
