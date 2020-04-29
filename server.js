@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
+const compression = require('compression');
 
 //adds file to process.env
 if ( process.env.NODE_ENV !== 'production' ) {
@@ -12,6 +13,9 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const app = express();
 const port = process.env.PORT || 5000;  //heroku sets port env
+
+//heroku doesn't gzip by default so we have to do it
+app.use(compression());
 
 app.use( bodyParser.json() ); //process any request's body as json
 app.use( bodyParser.urlencoded( { extended: true })); //escapes url strings
