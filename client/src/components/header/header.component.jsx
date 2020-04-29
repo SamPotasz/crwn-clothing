@@ -15,27 +15,28 @@ import { HeaderContainer, OptionLink, OptionsContainer, LogoContainer } from './
 const Header = (props) => {
   const { currentUser, hidden, dispatchSignOutStart } = props;
 
-   return( <HeaderContainer>
-        <LogoContainer to="/">
-            <Logo className='logo'/>
-        </LogoContainer>
-        
-        <OptionsContainer>
-            <OptionLink to='/shop'>
-                Shop
-            </OptionLink>
-            {/* <OptionLink to='/shop'>
-                Contact
-            </OptionLink> */}
-            {
-                currentUser ? 
-                <OptionLink as='div' onClick={dispatchSignOutStart}>SIGN OUT</OptionLink> 
-                : 
-                <OptionLink to='/signin'>SIGN IN</OptionLink>
-            }
-            <CartIcon />
-        </OptionsContainer>
-        { hidden ? null : <CartDropdown /> }
+   return( 
+    <HeaderContainer>
+      <LogoContainer to="/">
+          <Logo className='logo'/>
+      </LogoContainer>
+      
+      <OptionsContainer>
+          <OptionLink to='/shop'>
+              Shop
+          </OptionLink>
+          {/* <OptionLink to='/shop'>
+              Contact
+          </OptionLink> */}
+          {
+              currentUser ? 
+              <OptionLink as='div' onClick={dispatchSignOutStart}>SIGN OUT</OptionLink> 
+              : 
+              <OptionLink to='/signin'>SIGN IN</OptionLink>
+          }
+          <CartIcon />
+      </OptionsContainer>
+      { hidden ? null : <CartDropdown /> }
     </HeaderContainer>
    )
 }
