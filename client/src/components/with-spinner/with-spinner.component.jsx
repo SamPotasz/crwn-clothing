@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { SpinnerContainer, SpinnerOverlay } from './with-spinner.styles';
+import Spinner from '../../components/spinner/spinner.component';
 
 /**
  * Higher order component which takes a component which takes an isLoading property,
@@ -9,12 +9,10 @@ import { SpinnerContainer, SpinnerOverlay } from './with-spinner.styles';
  */
 const WithSpinner = WrappedComponent => ({ isLoading, ...otherProps }) => {
     return isLoading ? (
-        <SpinnerOverlay>
-            <SpinnerContainer />
-        </SpinnerOverlay>
+        <Spinner />
     ) : (
         <WrappedComponent {...otherProps} />
     );
-};
+}; 
 
 export default WithSpinner;

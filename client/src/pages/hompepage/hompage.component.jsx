@@ -4,10 +4,13 @@ import DirectoryMenu from '../../components/directory-menu/directory-menu.compon
 
 import { HomePageContainer } from './homepage.styles.jsx';
 
-const HomePage = () => (
+const HomePage = () => {
+  throw Error;
+  return (
     <HomePageContainer>
         <DirectoryMenu />
-    </HomePageContainer>    
-)
+    </HomePageContainer>  
+  )  
+}
 
 export default HomePage;
